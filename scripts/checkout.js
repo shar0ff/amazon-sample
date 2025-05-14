@@ -123,6 +123,9 @@ document.querySelectorAll(".js-update-link").forEach((link) => {
 
         const container = document.querySelector(`.js-cart-item-container-${productId}`);
         container.classList.add("is-editing-quantity");
+
+        const previousQuantity = container.querySelector(".quantity-label").innerText.trim();
+        container.querySelector(".quantity-input").value = previousQuantity;
     });
 });
 
@@ -133,9 +136,9 @@ document.querySelectorAll(".js-save-link").forEach((link) => {
         const container = document.querySelector(`.js-cart-item-container-${productId}`);
         container.classList.remove("is-editing-quantity");
 
-        const productQuantity = Number(document.querySelector(".quantity-input").value);
+        const productQuantity = Number(container.querySelector(".quantity-input").value);
         updateProductQuantity(productId, productQuantity);
-        document.querySelector(".quantity-label").innerHTML = productQuantity;
         updateCartQuantity();
+        container.querySelector(".quantity-label").innerHTML = productQuantity;
     });
 });
