@@ -1,4 +1,4 @@
-import {cart, deletetFromCart} from '../data/cart.js';
+import {cart, deleteFromCart} from '../data/cart.js';
 import {products} from '../data/products.js';
 import { formatCurrency } from './helpers/currency.js';
 
@@ -100,7 +100,7 @@ document.querySelector(".js-order-summary").innerHTML = orderSummaryHTML;
 document.querySelectorAll(".js-delete-link").forEach((link) => {
     link.addEventListener("click", () => {
         const productId = link.dataset.productId;
-        deletetFromCart(productId);
+        deleteFromCart(productId);
         const containerToDelete = document.querySelector(`.js-cart-item-container-${productId}`);
         containerToDelete.remove();
     })
