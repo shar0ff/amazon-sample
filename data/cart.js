@@ -42,3 +42,18 @@ export function deleteFromCart (productId) {
   cart = newCart;
   saveToStorage();
 }
+
+export function calculateCartQuantity() {
+  let cartQuantity = 0;
+
+  cart.forEach((cartItem) => {
+    cartQuantity += cartItem.productQuantity;
+  });
+
+  return cartQuantity;
+}
+
+export function updateCartQuantity() {
+  const cartQuantity = calculateCartQuantity();
+  document.querySelector(".js-cart-quantity").innerHTML = cartQuantity;
+}
