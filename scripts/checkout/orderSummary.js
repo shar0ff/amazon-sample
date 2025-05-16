@@ -1,7 +1,8 @@
 import {updateProductQuantity, calculateCartQuantity, cart, deleteFromCart, updateDeliveryOption} from '../../data/cart.js';
-import {products, getProductById} from '../../data/products.js';
+import {getProductById} from '../../data/products.js';
 import {formatCurrency} from '../helpers/currency.js';
 import {deliveryOptions, getDeliveryOptionById} from '../../data/deliveryOptions.js';
+import { renderPaymentSummary } from './paymentSummary.js';
 import  dayjs from 'https://unpkg.com/dayjs@1.11.9/esm/index.js';
 
 export function renderOrderSummary() {
@@ -106,6 +107,7 @@ export function renderOrderSummary() {
             updateCartQuantity();
             const containerToDelete = document.querySelector(`.js-cart-item-container-${productId}`);
             containerToDelete.remove();
+            renderPaymentSummary();
         })
     })
 
@@ -132,6 +134,7 @@ export function renderOrderSummary() {
             updateProductQuantity(productId, productQuantity);
             updateCartQuantity();
             container.querySelector(".quantity-label").innerHTML = productQuantity;
+            renderPaymentSummary();
         });
     });
 
@@ -140,6 +143,7 @@ export function renderOrderSummary() {
             const {productId, deliveryOptionId} = option.dataset
             updateDeliveryOption(productId, deliveryOptionId);
             renderOrderSummary();
+            renderPaymentSummary();
         });
     });
 }
