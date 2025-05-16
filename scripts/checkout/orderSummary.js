@@ -1,9 +1,8 @@
 import {updateProductQuantity, calculateCartQuantity, cart, deleteFromCart, updateDeliveryOption} from '../../data/cart.js';
 import {getProductById} from '../../data/products.js';
 import {formatCurrency} from '../helpers/currency.js';
-import {deliveryOptions, getDeliveryOptionById} from '../../data/deliveryOptions.js';
+import {deliveryOptions, getDeliveryOptionById, calculateDeliveryDate} from '../../data/deliveryOptions.js';
 import { renderPaymentSummary } from './paymentSummary.js';
-import  dayjs from 'https://unpkg.com/dayjs@1.11.9/esm/index.js';
 
 export function renderOrderSummary() {
     let orderSummaryHTML = '';
@@ -15,8 +14,7 @@ export function renderOrderSummary() {
 
         const deliveryOptionId = cartItem.deliveryOptionId;
         const deliveryOption = getDeliveryOptionById(deliveryOptionId);
-
-        const deliveryDate = dayjs().add(deliveryOption.deliveryDays, 'days').format('dddd, MMMM D');
+        const deliveryDate = calculateDeliveryDate(deliveryOption);
 
         orderSummaryHTML += `
             <div class="cart-item-container 
@@ -67,7 +65,7 @@ export function renderOrderSummary() {
     function deliveryOptionsHTML(matchingProductId, cartItem) {
         let html = '';
         deliveryOptions.forEach((option) => {
-            const deliveryDate = dayjs().add(option.deliveryDays, 'days').format('dddd, MMMM D');
+            const deliveryDate = calculateDeliveryDate(option);
             const deliveryPrice = (option.priceCents === 0) ? 'FREE' : `$${formatCurrency(option.priceCents)} - `;
 
             const isChecked = option.id === cartItem.deliveryOptionId;
@@ -93,8 +91,8 @@ export function renderOrderSummary() {
     }
 
     function updateCartQuantity() {
-    const cartQuantity = calculateCartQuantity();
-    document.querySelector(".js-return-to-home-link").innerHTML = `${cartQuantity} ${cartQuantity === 1 ? "item" : "items"}`;
+        const cartQuantity = calculateCartQuantity();
+        document.querySelector(".js-return-to-home-link").innerHTML = `${cartQuantity} ${cartQuantity === 1 ? "item" : "items"}`;
     }
 
     document.querySelector(".js-order-summary").innerHTML = orderSummaryHTML;
@@ -105,8 +103,7 @@ export function renderOrderSummary() {
             const productId = link.dataset.productId;
             deleteFromCart(productId);
             updateCartQuantity();
-            const containerToDelete = document.querySelector(`.js-cart-item-container-${productId}`);
-            containerToDelete.remove();
+            renderOrderSummary();
             renderPaymentSummary();
         })
     })
