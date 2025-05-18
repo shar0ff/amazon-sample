@@ -1,4 +1,4 @@
-import {formatCurrency} from "../scripts/helpers/currency.js";
+import {formatCurrency} from "../../scripts/helpers/currency.js";
 
 describe('Test suite: formatCurrency', () => {
     it('Converts cents into dollars', () => {
