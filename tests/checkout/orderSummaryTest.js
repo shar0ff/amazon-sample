@@ -14,7 +14,7 @@ describe('Test suite: renderOrderSummary', () => {
     let productPrice2;
 
     beforeAll((done) => {
-        loadProducts(() => {
+        loadProducts().then(() => {
             done();
             productName1 = getProductById(productId1).name;
             productName2 = getProductById(productId2).name;

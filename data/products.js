@@ -61,6 +61,8 @@ export class Appliance extends Product {
   }
 }
 
+export let products = [];
+
 export function getProductById(productId) {
   let matchingProduct;
 
@@ -73,13 +75,11 @@ export function getProductById(productId) {
   return matchingProduct;
 }
 
-export let products = [];
-
-export function loadProducts(func) {
-  const xhr = new XMLHttpRequest();
-
-  xhr.addEventListener("load", () => {
-    products = JSON.parse(xhr.response).map((productDetails) => {
+export function loadProducts() {
+  const promise = fetch("https://supersimplebackend.dev/products").then((response) => {
+    return response.json();
+  }).then((productsData) => {
+    products = productsData.map((productDetails) => {
       if(productDetails.type === 'clothing') {
         return new Clothing(productDetails);
       } else if (productDetails.type === 'appliance') {
@@ -88,11 +88,9 @@ export function loadProducts(func) {
         return new Product(productDetails);
       }
     });
-    func();
   });
 
-  xhr.open("GET", "https://supersimplebackend.dev/products");
-  xhr.send();
+  return promise
 }
 
 /*
