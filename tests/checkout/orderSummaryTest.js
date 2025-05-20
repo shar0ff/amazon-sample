@@ -2,15 +2,26 @@ import {renderOrderSummary} from "../../scripts/checkout/orderSummary.js";
 import {cart} from "../../data/cart.js";
 import { getProductById } from "../../data/products.js";
 import { formatCurrency } from "../../scripts/helpers/currency.js";
+import { loadProducts } from "../../data/products.js";
 
 describe('Test suite: renderOrderSummary', () => {
 
     const productId1 = "e43638ce-6aa0-4b85-b27f-e1d07eb678c6";
     const productId2 = "15b6fc6f-327a-4ec4-896f-486349e85a3d";
-    const productName1 = getProductById(productId1).name;
-    const productName2 = getProductById(productId2).name;
-    const productPrice1 = `$${formatCurrency(getProductById(productId1).priceCents)}`;
-    const productPrice2 = `$${formatCurrency(getProductById(productId2).priceCents)}`;
+    let productName1;
+    let productName2;
+    let productPrice1;
+    let productPrice2;
+
+    beforeAll((done) => {
+        loadProducts(() => {
+            done();
+            productName1 = getProductById(productId1).name;
+            productName2 = getProductById(productId2).name;
+            productPrice1 = `$${formatCurrency(getProductById(productId1).priceCents)}`;
+            productPrice2 = `$${formatCurrency(getProductById(productId2).priceCents)}`;
+        });
+    });
 
     beforeEach(() => {
         document.querySelector(".js-test-container").innerHTML = `
