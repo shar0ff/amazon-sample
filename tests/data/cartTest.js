@@ -9,7 +9,7 @@ describe('Test suite: addToCart', () => {
     it('Adds an existing product to the cart', () => {
         cart.cartItems = [{
             productId: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
-            productQuantity: 1,
+            quantity: 1,
             deliveryOptionId: '1'
         }];
 
@@ -17,10 +17,10 @@ describe('Test suite: addToCart', () => {
         expect(cart.cartItems.length).toEqual(1);
         expect(localStorage.setItem).toHaveBeenCalledTimes(1);
         expect(cart.cartItems[0].productId).toEqual("e43638ce-6aa0-4b85-b27f-e1d07eb678c6");
-        expect(cart.cartItems[0].productQuantity).toEqual(2);
+        expect(cart.cartItems[0].quantity).toEqual(2);
         expect(localStorage.setItem).toHaveBeenCalledWith('cart', JSON.stringify([{
                 productId: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
-                productQuantity: 2,
+                quantity: 2,
                 deliveryOptionId: "1"
         }]));
     });
@@ -36,10 +36,10 @@ describe('Test suite: addToCart', () => {
         expect(cart.cartItems.length).toEqual(1);
         expect(localStorage.setItem).toHaveBeenCalledTimes(1);
         expect(cart.cartItems[0].productId).toEqual("e43638ce-6aa0-4b85-b27f-e1d07eb678c6");
-        expect(cart.cartItems[0].productQuantity).toEqual(1);
+        expect(cart.cartItems[0].quantity).toEqual(1);
         expect(localStorage.setItem).toHaveBeenCalledWith('cart', JSON.stringify([{
                 productId: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
-                productQuantity: 1,
+                quantity: 1,
                 deliveryOptionId: "1"
         }]));
     });
@@ -52,7 +52,7 @@ describe('Test suite: deleteFromCart', () => {
 
         cart.cartItems = [{
             productId: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
-            productQuantity: 1,
+            quantity: 1,
             deliveryOptionId: '1'
         }];
     });
@@ -70,11 +70,11 @@ describe('Test suite: deleteFromCart', () => {
 
         expect(cart.cartItems.length).toEqual(1);
         expect(cart.cartItems[0].productId).toEqual("e43638ce-6aa0-4b85-b27f-e1d07eb678c6");
-        expect(cart.cartItems[0].productQuantity).toEqual(1);
+        expect(cart.cartItems[0].quantity).toEqual(1);
         expect(localStorage.setItem).toHaveBeenCalledTimes(1);
         expect(localStorage.setItem).toHaveBeenCalledWith('cart', JSON.stringify([{
             productId: 'e43638ce-6aa0-4b85-b27f-e1d07eb678c6',
-            productQuantity: 1,
+            quantity: 1,
             deliveryOptionId: "1"
         }]));
     });
@@ -87,7 +87,7 @@ describe("Test suite: updateDeliveryOption", () => {
 
         cart.cartItems = [{
             productId: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
-            productQuantity: 1,
+            quantity: 1,
             deliveryOptionId: '1'
         }];
     });
@@ -97,12 +97,12 @@ describe("Test suite: updateDeliveryOption", () => {
 
         expect(cart.cartItems.length).toEqual(1);
         expect(cart.cartItems[0].productId).toEqual("e43638ce-6aa0-4b85-b27f-e1d07eb678c6");
-        expect(cart.cartItems[0].productQuantity).toEqual(1);
+        expect(cart.cartItems[0].quantity).toEqual(1);
         expect(cart.cartItems[0].deliveryOptionId).toEqual("2");
         expect(localStorage.setItem).toHaveBeenCalledTimes(1);
         expect(localStorage.setItem).toHaveBeenCalledWith('cart', JSON.stringify([{
             productId: 'e43638ce-6aa0-4b85-b27f-e1d07eb678c6',
-            productQuantity: 1,
+            quantity: 1,
             deliveryOptionId: '2'
         }]));
     });
@@ -111,7 +111,7 @@ describe("Test suite: updateDeliveryOption", () => {
         cart.updateDeliveryOption("e43638ce-6aa0-4b85-b27f-e1d07eb678c6-not-existing", '2');
         expect(cart.cartItems.length).toEqual(1);
         expect(cart.cartItems[0].productId).toEqual('e43638ce-6aa0-4b85-b27f-e1d07eb678c6');
-        expect(cart.cartItems[0].productQuantity).toEqual(1);
+        expect(cart.cartItems[0].quantity).toEqual(1);
         expect(cart.cartItems[0].deliveryOptionId).toEqual('1');
         expect(localStorage.setItem).toHaveBeenCalledTimes(0);
     });

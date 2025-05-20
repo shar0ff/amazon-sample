@@ -8,18 +8,14 @@ class Cart {
   }
 
   #loadFromStorage() {
-    this.cartItems = JSON.parse(localStorage.getItem(this.#localStorageKey));
-
-    if (!this.cart) {
-      this.cart = [];
-    }
+    this.cartItems = JSON.parse(localStorage.getItem(this.#localStorageKey)) || [];
   }
 
   saveToStorage() {
     localStorage.setItem(this.#localStorageKey, JSON.stringify(this.cartItems));
   }
 
-  addToCart(productId, productQuantity){
+  addToCart(productId, quantity){
     let matchingItem;
 
     this.cartItems.forEach((cartItem) => {
@@ -29,11 +25,11 @@ class Cart {
     });
 
     if (matchingItem) {
-      matchingItem.productQuantity += productQuantity;
+      matchingItem.quantity += quantity;
     } else {
       this.cartItems.push({
         productId,
-        productQuantity,
+        quantity,
         deliveryOptionId: '1'
       });
     }
@@ -58,7 +54,7 @@ class Cart {
     let cartQuantity = 0;
 
     this.cartItems.forEach((cartItem) => {
-      cartQuantity += cartItem.productQuantity;
+      cartQuantity += cartItem.quantity;
     });
 
     return cartQuantity;
@@ -69,7 +65,7 @@ class Cart {
     document.querySelector(".js-cart-quantity").innerHTML = cartQuantity;
   }
 
-  updateProductQuantity(productId, newQuantity) {
+  updatequantity(productId, newQuantity) {
     let matchingItem;
 
     this.cartItems.forEach((cartItem) => {
@@ -78,7 +74,7 @@ class Cart {
       }
     });
 
-    matchingItem.productQuantity = newQuantity;
+    matchingItem.quantity = newQuantity;
     this.saveToStorage();
   }
 

@@ -71,9 +71,9 @@ function renderProductsGrid() {
   document.querySelectorAll(".js-add-to-cart").forEach((button) => {
     button.addEventListener('click', () => {
       const productId = button.dataset.productId;
-      const productQuantity = Number(document.querySelector(`.js-quantity-selector-${productId}`).value);
+      const quantity = Number(document.querySelector(`.js-quantity-selector-${productId}`).value);
 
-      cart.addToCart(productId, productQuantity);
+      cart.addToCart(productId, quantity);
       cart.updateCartQuantity();
     });
   });

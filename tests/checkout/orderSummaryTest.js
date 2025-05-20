@@ -34,11 +34,11 @@ describe('Test suite: renderOrderSummary', () => {
 
         cart.cartItems = [{
         productId: productId1,
-        productQuantity: 2,
+        quantity: 2,
         deliveryOptionId: '1'
         }, {
         productId: productId2,
-        productQuantity: 1,
+        quantity: 1,
         deliveryOptionId: '2'
         }];
 

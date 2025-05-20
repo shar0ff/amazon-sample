@@ -36,7 +36,7 @@ export function renderOrderSummary() {
                     </div>
                     <div class="product-quantity js-product-quantity-${matchingProduct.id}">
                         <span>
-                        Quantity: <span class="quantity-label">${cartItem.productQuantity}</span>
+                        Quantity: <span class="quantity-label">${cartItem.quantity}</span>
                         </span>
                         <span class="update-quantity-link link-primary js-update-link" data-product-id="${matchingProduct.id}">
                         Update
@@ -127,10 +127,10 @@ export function renderOrderSummary() {
             const container = document.querySelector(`.js-cart-item-container-${productId}`);
             container.classList.remove("is-editing-quantity");
 
-            const productQuantity = Number(container.querySelector(".quantity-input").value);
-            cart.updateProductQuantity(productId, productQuantity);
+            const quantity = Number(container.querySelector(".quantity-input").value);
+            cart.updatequantity(productId, quantity);
             updateCartQuantity();
-            container.querySelector(".quantity-label").innerHTML = productQuantity;
+            container.querySelector(".quantity-label").innerHTML = quantity;
             renderPaymentSummary();
         });
     });
