@@ -88,6 +88,8 @@ export function loadProducts() {
         return new Product(productDetails);
       }
     });
+  }).catch((error) => {
+    console.log("An error occurred while products loading!");
   });
 
   return promise
