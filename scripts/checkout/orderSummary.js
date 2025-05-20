@@ -1,5 +1,5 @@
-import {updateProductQuantity, calculateCartQuantity, cart, deleteFromCart, updateDeliveryOption} from '../../data/cart.js';
-import {getProductById} from '../../data/products.js';
+import {cart} from '../../data/cart.js';
+import { getProductById } from '../../data/products.js';
 import {formatCurrency} from '../helpers/currency.js';
 import {deliveryOptions, getDeliveryOptionById, calculateDeliveryDate} from '../../data/deliveryOptions.js';
 import { renderPaymentSummary } from './paymentSummary.js';
@@ -7,7 +7,7 @@ import { renderPaymentSummary } from './paymentSummary.js';
 export function renderOrderSummary() {
     let orderSummaryHTML = '';
 
-    cart.forEach((cartItem) => {
+    cart.cartItems.forEach((cartItem) => {
 
         const productId = cartItem.productId;
         const matchingProduct = getProductById(productId);
@@ -91,7 +91,7 @@ export function renderOrderSummary() {
     }
 
     function updateCartQuantity() {
-        const cartQuantity = calculateCartQuantity();
+        const cartQuantity = cart.calculateCartQuantity();
         document.querySelector(".js-return-to-home-link").innerHTML = `${cartQuantity} ${cartQuantity === 1 ? "item" : "items"}`;
     }
 
@@ -101,7 +101,7 @@ export function renderOrderSummary() {
     document.querySelectorAll(".js-delete-link").forEach((link) => {
         link.addEventListener("click", () => {
             const productId = link.dataset.productId;
-            deleteFromCart(productId);
+            cart.deleteFromCart(productId);
             updateCartQuantity();
             renderOrderSummary();
             renderPaymentSummary();
@@ -128,7 +128,7 @@ export function renderOrderSummary() {
             container.classList.remove("is-editing-quantity");
 
             const productQuantity = Number(container.querySelector(".quantity-input").value);
-            updateProductQuantity(productId, productQuantity);
+            cart.updateProductQuantity(productId, productQuantity);
             updateCartQuantity();
             container.querySelector(".quantity-label").innerHTML = productQuantity;
             renderPaymentSummary();
@@ -138,7 +138,7 @@ export function renderOrderSummary() {
     document.querySelectorAll(".js-delivery-option").forEach((option) => {
         option.addEventListener("click", () => {
             const {productId, deliveryOptionId} = option.dataset
-            updateDeliveryOption(productId, deliveryOptionId);
+            cart.updateDeliveryOption(productId, deliveryOptionId);
             renderOrderSummary();
             renderPaymentSummary();
         });

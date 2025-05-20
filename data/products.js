@@ -1,6 +1,6 @@
 import {formatCurrency} from "../scripts/helpers/currency.js";
 
-class Product {
+export class Product {
   id;
   image;
   name;
@@ -16,23 +16,11 @@ class Product {
   }
 
   getStarsUrl() {
-    return `images/ratings/rating-${this.rating.stars * 10}.png"`;
+    return `images/ratings/rating-${this.rating.stars * 10}.png`;
   }
 
   getPrice() {
     return `$${formatCurrency(this.priceCents)}`;
-  }
-
-  getProductById(productId) {
-    let matchingProduct;
-
-    products.forEach((product) => {
-        if (product.id === productId) {
-            matchingProduct = product;
-        }
-    });
-
-    return matchingProduct;
   }
 
   extraInfoHTML() {
@@ -40,11 +28,11 @@ class Product {
   }
 }
 
-class Clothing extends Product {
+export class Clothing extends Product {
   sizeChartLink;
 
   constructor(productDetails) {
-    super();
+    super(productDetails);
     this.sizeChartLink = productDetails.sizeChartLink;
   }
 
@@ -55,12 +43,12 @@ class Clothing extends Product {
   }
 }
 
-class Appliance extends Product {
+export class Appliance extends Product {
   instructionsLink;
   warrantyLink;
 
   constructor(productDetails) {
-    super();
+    super(productDetails);
     this.instructionsLink = productDetails.instructionsLink;
     this.warrantyLink = productDetails.warrantyLink;
   }
@@ -71,6 +59,18 @@ class Appliance extends Product {
       <a href="${this.warrantyLink}" target="_blank">Warranty</a>
     `;
   }
+}
+
+export function getProductById(productId) {
+  let matchingProduct;
+
+  products.forEach((product) => {
+      if (product.id === productId) {
+          matchingProduct = product;
+      }
+  });
+
+  return matchingProduct;
 }
 
 export const products = [
