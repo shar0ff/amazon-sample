@@ -1,95 +1,101 @@
-export let cart;
-loadFromStorage();
+class Cart {
+  cartItems = undefined;
+  #localStorageKey = undefined;
 
-export function loadFromStorage() {
-  cart = JSON.parse(localStorage.getItem('cart'));
-
-  if (!cart) {
-    cart = [];
+  constructor(localStorageKey) {
+    this.#localStorageKey = localStorageKey;
+    this.#loadFromStorage();
   }
-}
 
-export function saveToStorage() {
-  localStorage.setItem('cart', JSON.stringify(cart));
-}
+  #loadFromStorage() {
+    this.cartItems = JSON.parse(localStorage.getItem(this.#localStorageKey));
 
-export function addToCart(productId, productQuantity){
-  let matchingItem;
-
-  cart.forEach((cartItem) => {
-    if (productId === cartItem.productId) {
-      matchingItem = cartItem;
+    if (!this.cart) {
+      this.cart = [];
     }
-  });
+  }
 
-  if (matchingItem) {
-    matchingItem.productQuantity += productQuantity;
-  } else {
-    cart.push({
-      productId,
-      productQuantity,
-      deliveryOptionId: '1'
+  saveToStorage() {
+    localStorage.setItem(this.#localStorageKey, JSON.stringify(this.cartItems));
+  }
+
+  addToCart(productId, productQuantity){
+    let matchingItem;
+
+    this.cartItems.forEach((cartItem) => {
+      if (productId === cartItem.productId) {
+        matchingItem = cartItem;
+      }
+    });
+
+    if (matchingItem) {
+      matchingItem.productQuantity += productQuantity;
+    } else {
+      this.cartItems.push({
+        productId,
+        productQuantity,
+        deliveryOptionId: '1'
+      });
+    }
+
+    this.saveToStorage();
+  }
+
+  deleteFromCart (productId) {
+    const newCart = [];
+
+    this.cartItems.forEach((cartItem) => {
+      if (cartItem.productId !== productId) {
+        newCart.push(cartItem);
+      }
     })
+
+    this.cartItems = newCart;
+    this.saveToStorage();
   }
 
-  saveToStorage();
-}
+  calculateCartQuantity() {
+    let cartQuantity = 0;
 
-export function deleteFromCart (productId) {
+    this.cartItems.forEach((cartItem) => {
+      cartQuantity += cartItem.productQuantity;
+    });
 
-  const newCart = [];
+    return cartQuantity;
+  }
 
-  cart.forEach((cartItem) => {
-    if (cartItem.productId !== productId) {
-      newCart.push(cartItem);
-    }
-  })
+  updateCartQuantity() {
+    const cartQuantity = this.calculateCartQuantity();
+    document.querySelector(".js-cart-quantity").innerHTML = cartQuantity;
+  }
 
-  cart = newCart;
-  saveToStorage();
-}
+  updateProductQuantity(productId, newQuantity) {
+    let matchingItem;
 
-export function calculateCartQuantity() {
-  let cartQuantity = 0;
+    this.cartItems.forEach((cartItem) => {
+      if(cartItem.productId === productId) {
+        matchingItem = cartItem;
+      }
+    });
 
-  cart.forEach((cartItem) => {
-    cartQuantity += cartItem.productQuantity;
-  });
+    matchingItem.productQuantity = newQuantity;
+    this.saveToStorage();
+  }
 
-  return cartQuantity;
-}
+  updateDeliveryOption (productId, deliveryOptionId) {
+    let matchingItem;
 
-export function updateCartQuantity() {
-  const cartQuantity = calculateCartQuantity();
-  document.querySelector(".js-cart-quantity").innerHTML = cartQuantity;
-}
+    this.cartItems.forEach((cartItem) => {
+      if (productId === cartItem.productId) {
+        matchingItem = cartItem;
+      }
+    });
 
-export function updateProductQuantity(productId, newQuantity) {
-  let matchingItem;
-
-  cart.forEach((cartItem) => {
-    if(cartItem.productId === productId) {
-      matchingItem = cartItem;
-    }
-  });
-
-  matchingItem.productQuantity = newQuantity;
-  saveToStorage();
-}
-
-export function updateDeliveryOption (productId, deliveryOptionId) {
-  let matchingItem;
-
-  cart.forEach((cartItem) => {
-    if (productId === cartItem.productId) {
-      matchingItem = cartItem;
-    }
-  });
-
-  if(matchingItem) {
-    matchingItem.deliveryOptionId = deliveryOptionId;
-    saveToStorage();
-  } else {
-    return;
-  }  
+    if(matchingItem) {
+      matchingItem.deliveryOptionId = deliveryOptionId;
+      this.saveToStorage();
+    } else {
+      return;
+    }  
+  }
 }
