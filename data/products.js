@@ -34,6 +34,25 @@ class Product {
 
     return matchingProduct;
   }
+
+  extraInfoHTML() {
+    return '';
+  }
+}
+
+class Clothing extends Product{
+  sizeChartLink;
+
+  constructor(productDetails) {
+    super();
+    this.sizeChartLink = productDetails.sizeChartLink;
+  }
+
+  extraInfoHTML() {
+    return `
+      <a href="${this.sizeChartLink}" target="_blank">Size chart</a>
+    `;
+  }
 }
 
 export const products = [
@@ -696,5 +715,9 @@ export const products = [
     ]
   }
 ].map((productDetils) => {
-  return new Product(productDetils);
+  if (productDetils.type === 'clothing') {
+    return new Clothing(productDetils);
+  } else {
+      return new Product(productDetils);
+  }
 });
