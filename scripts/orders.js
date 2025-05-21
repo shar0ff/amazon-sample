@@ -78,6 +78,7 @@ async function loadPage() {
     }
 
     document.querySelector('.js-orders-grid').innerHTML = ordersHTML;
+    cart.updateCartQuantity();
 
     document.querySelectorAll('.js-buy-again').forEach((button) => {
         button.addEventListener('click', () => {
@@ -96,4 +97,3 @@ async function loadPage() {
 }
 
 loadPage();
-cart.updateCartQuantity();
