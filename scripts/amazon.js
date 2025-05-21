@@ -95,4 +95,11 @@ function renderProductsGrid() {
     const search = document.querySelector(".js-search-bar").value;
     window.location.href = `amazon.html?search=${search}`;
   });
+
+  document.querySelector(".js-search-button").addEventListener("keydown", (e) => {
+    if(e.key === "Enter") {
+      const search = document.querySelector(".js-search-bar").value;
+      window.location.href = `amazon.html?search=${search}`;
+    }
+  });
 }

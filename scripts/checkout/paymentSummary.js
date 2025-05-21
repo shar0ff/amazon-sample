@@ -77,6 +77,7 @@ export function renderPaymentSummary() {
             console.log("An error occurred while creating an order!");
         }
 
+        cart.resetCart();
         window.location.href = "orders.html";
     });
 }
