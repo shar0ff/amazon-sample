@@ -8,7 +8,20 @@ loadProducts().then(() => {
 function renderProductsGrid() {
   let productsHTML = '';
 
-  products.forEach((product) => {
+  const url = new URLSearchParams(location.search)
+  let search = url.get('search');
+
+  let filteredProducts = products;
+
+  if (search) {
+    search = search.toLowerCase()
+    filteredProducts = products.filter(product => {
+      return product.name.toLowerCase().includes(search) 
+      || product.keywords.some(keyword => keyword.toLowerCase().includes(search));
+    })
+  }
+
+  filteredProducts.forEach((product) => {
     productsHTML += `
       <div class="product-container">
         <div class="product-image-container">
@@ -76,5 +89,10 @@ function renderProductsGrid() {
       cart.addToCart(productId, quantity);
       cart.updateCartQuantity();
     });
+  });
+
+  document.querySelector(".js-search-button").addEventListener("click", () => {
+    const search = document.querySelector(".js-search-bar").value;
+    window.location.href = `amazon.html?search=${search}`;
   });
 }
