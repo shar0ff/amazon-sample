@@ -23,7 +23,7 @@ function renderProductsGrid() {
 
   filteredProducts.forEach((product) => {
     productsHTML += `
-      <div class="product-container">
+      <div class="product-container js-product-container" data-product-id=${product.id}>
         <div class="product-image-container">
           <img class="product-image"
           src="${product.image}">
@@ -101,5 +101,12 @@ function renderProductsGrid() {
       const search = document.querySelector(".js-search-bar").value;
       window.location.href = `amazon.html?search=${search}`;
     }
+  });
+
+  document.querySelectorAll(".js-product-container").forEach((container) => {
+    container.addEventListener("click", () => {
+      let productId = container.dataset.productId;
+      window.location.href = `product.html?productId=${productId}`;
+    });
   });
 }
