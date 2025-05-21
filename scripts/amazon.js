@@ -23,8 +23,8 @@ function renderProductsGrid() {
 
   filteredProducts.forEach((product) => {
     productsHTML += `
-      <div class="product-container js-product-container" data-product-id=${product.id}>
-        <div class="product-image-container">
+      <div class="product-container js-product-container">
+        <div class="product-image-container js-product-image-container" data-product-id=${product.id}>
           <img class="product-image"
           src="${product.image}">
         </div>
@@ -64,7 +64,7 @@ function renderProductsGrid() {
 
         <div class="product-spacer"></div>
 
-        <div class="added-to-cart">
+        <div class="added-to-cart js-added-to-cart-${product.id}">
           <img src="images/icons/checkmark.png">
           Added
         </div>
@@ -84,10 +84,18 @@ function renderProductsGrid() {
   document.querySelectorAll(".js-add-to-cart").forEach((button) => {
     button.addEventListener('click', () => {
       const productId = button.dataset.productId;
+      const addedMessage = document.querySelector(`.js-added-to-cart-${productId}`);
+           let addedMessageTimeoutId;
       const quantity = Number(document.querySelector(`.js-quantity-selector-${productId}`).value);
 
       cart.addToCart(productId, quantity);
       cart.updateCartQuantity();
+
+      addedMessage.classList.add('added-to-cart-visible');
+
+      setTimeout(() => {
+        addedMessage.classList.remove('added-to-cart-visible');
+      }, 2000);
     });
   });
 
@@ -103,7 +111,7 @@ function renderProductsGrid() {
     }
   });
 
-  document.querySelectorAll(".js-product-container").forEach((container) => {
+  document.querySelectorAll(".js-product-image-container").forEach((container) => {
     container.addEventListener("click", () => {
       let productId = container.dataset.productId;
       window.location.href = `product.html?productId=${productId}`;
