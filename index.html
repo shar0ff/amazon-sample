@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <title>Amazon</title>
 
@@ -16,11 +16,11 @@
   <body>
     <div class="amazon-header">
       <div class="amazon-header-left-section">
-        <a href="amazon.html" class="header-link">
+        <a href="index.html" class="header-link">
           <img class="amazon-logo"
-            src="images/amazon-logo-white.png">
+            src="images/amazon-logo-white.png" alt="Amazon logo">
           <img class="amazon-mobile-logo"
-            src="images/amazon-mobile-logo-white.png">
+            src="images/amazon-mobile-logo-white.png" alt="Amazon mobile logo">
         </a>
       </div>
 
@@ -28,7 +28,12 @@
         <input class="search-bar js-search-bar" type="text" placeholder="Search">
 
         <button class="search-button js-search-button">
-          <img class="search-icon" src="images/icons/search-icon.png">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+
+          <!-- <img class="search-icon" src="images/icons/search-icon.png" alt="Search icon"> -->
         </button>
       </div>
 
@@ -39,7 +44,7 @@
         </a>
 
         <a class="cart-link header-link" href="checkout.html">
-          <img class="cart-icon" src="images/icons/cart-icon.png">
+          <img class="cart-icon" src="images/icons/cart-icon.png" alt="Cart icon">
           <div class="cart-quantity js-cart-quantity"></div>
           <div class="cart-text">Cart</div>
         </a>
