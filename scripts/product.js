@@ -1,21 +1,36 @@
 import {cart} from '../data/cart.js';
 import { getProductById, loadProducts, products } from '../data/products.js';
 
+/**
+ * Loads all product data from the backend and renders the
+ * product detail page for the product specified in the URL query.
+ */
 loadProducts().then(() => {
     loadPage();
 })
 
+/**
+ * Renders the product detail page for a single product.
+ * Handles:
+ * - Fetching product ID from the URL
+ * - Displaying product information (image, name, price, rating)
+ * - Swiper carousel for product image(s)
+ * - Quantity selector and "Add to Cart" functionality
+ * - Updates the cart quantity indicator
+ */
 function loadPage() {
     const urlParams = new URLSearchParams(window.location.search);
     const productId = urlParams.get('productId');
 
     const product = getProductById(productId);
 
+    // Handle invalid product ID
     if (!product) {
         document.querySelector('.js-product-page').innerHTML = '<p>Product not found.</p>';
         return;
     }
 
+    // Generate HTML for the product details section
     let productHTML = `
         <div class="product-detail-page">
             <div class="product-images">
@@ -65,15 +80,22 @@ function loadPage() {
         </div>
     `;
 
+    // Inject the generated HTML into the DOM
     document.querySelector(".js-product-page").innerHTML = productHTML;
+
+    // Update cart quantity in header
     cart.updateCartQuantity();
 
+    // Initialize Swiper carousel
     new Swiper('.swiper', {
         pagination: {
             el: '.swiper-pagination',
         },
     });
 
+    /**
+     * Attach event listeners to the "Add to Cart" button(s).
+     */
     document.querySelectorAll(".js-add-to-cart").forEach((button) => {
         button.addEventListener('click', () => {
             const productId = button.dataset.productId;

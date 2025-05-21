@@ -4,11 +4,23 @@ import {getDeliveryOptionById} from '../../data/deliveryOptions.js';
 import {formatCurrency} from '../helpers/currency.js';
 import { addOrder } from '../../data/orders.js';
 
+/**
+ * Renders the payment summary sidebar on the checkout page.
+ * Calculates subtotal, shipping cost, estimated tax, and total,
+ * and displays them in a structured format.
+ * 
+ * Also handles the "Place your order" button logic:
+ * - Sends order to backend
+ * - Stores order locally
+ * - Resets the cart
+ * - Redirects to the orders page
+ */
 export function renderPaymentSummary() {
 
     let productPriceCents = 0;
     let shippingPriceCents = 0;
 
+    // Calculate total product and shipping cost
     cart.cartItems.forEach((cartItem) => {
         const product = getProductById(cartItem.productId);
         productPriceCents += product.priceCents * cartItem.quantity;
@@ -21,6 +33,7 @@ export function renderPaymentSummary() {
     const taxCents = totalBeforTaxCents * 0.1;
     const totalCents = totalBeforTaxCents + taxCents;
 
+    // Generate the HTML for the payment summary
     const paymentSummaryHTML = `
         <div class="payment-summary-title">
             Order Summary
@@ -56,8 +69,10 @@ export function renderPaymentSummary() {
         </button>
     `
 
+    // Inject HTML into the DOM
     document.querySelector(".js-payment-summary").innerHTML = paymentSummaryHTML;
 
+    // Event listener: submit order and redirect
     document.querySelector(".js-place-order").addEventListener("click", async () => {
         try {
             const response = await fetch("https://supersimplebackend.dev/orders", {
@@ -77,6 +92,7 @@ export function renderPaymentSummary() {
             console.log("An error occurred while creating an order!");
         }
 
+        // Clear cart and redirect
         cart.resetCart();
         window.location.href = "orders.html";
     });

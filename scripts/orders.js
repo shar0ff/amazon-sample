@@ -4,6 +4,13 @@ import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
 import { formatCurrency } from './helpers/currency.js';
 import {cart} from '../data/cart.js';
 
+/**
+ * Initializes the orders page by:
+ * - Loading product data
+ * - Rendering a summary of each past order (date, total, ID)
+ * - Rendering order line items (products, delivery date, quantity, actions)
+ * - Binding "Buy Again" and "Track Package" interactions
+ */
 async function loadPage() {
     await loadProducts();
 
@@ -37,6 +44,12 @@ async function loadPage() {
         `;
     });
 
+    /**
+     * Generates the HTML block for all products in a given order.
+     *
+     * @param {Object} order - The order object containing product details.
+     * @returns {string} - HTML representing product cards in the order.
+     */
     function productsListHTML(order) {
         let productsListHTML = '';
 
@@ -77,14 +90,19 @@ async function loadPage() {
         return productsListHTML;
     }
 
+    // Inject final HTML
     document.querySelector('.js-orders-grid').innerHTML = ordersHTML;
     cart.updateCartQuantity();
 
+    /**
+     * Event: Handle Buy Again buttons – adds item to cart and updates UI.
+     */
     document.querySelectorAll('.js-buy-again').forEach((button) => {
         button.addEventListener('click', () => {
         cart.addToCart(button.dataset.productId, Number(button.dataset.productQuantity));
         cart.updateCartQuantity();
 
+        // Visual feedback
         button.innerHTML = 'Added';
         setTimeout(() => {
             button.innerHTML = `

@@ -4,6 +4,14 @@ import {formatCurrency} from '../helpers/currency.js';
 import {deliveryOptions, getDeliveryOptionById, calculateDeliveryDate} from '../../data/deliveryOptions.js';
 import { renderPaymentSummary } from './paymentSummary.js';
 
+/**
+ * Renders the full order summary on the checkout page, including:
+ * - Each cart item with delivery info
+ * - Quantity editing UI
+ * - Delivery option selection
+ * - Delete & save actions
+ * Also sets up all related event listeners.
+ */
 export function renderOrderSummary() {
     let orderSummaryHTML = '';
 
@@ -62,6 +70,13 @@ export function renderOrderSummary() {
         `;
     });
 
+/**
+   * Generates HTML for all available delivery options for a given product.
+   *
+   * @param {string} matchingProductId - ID of the product.
+   * @param {Object} cartItem - The cart item object containing current deliveryOptionId.
+   * @returns {string} - HTML markup for the delivery option selection section.
+   */
     function deliveryOptionsHTML(matchingProductId, cartItem) {
         let html = '';
         deliveryOptions.forEach((option) => {
@@ -90,14 +105,19 @@ export function renderOrderSummary() {
         return html;
     }
 
+/**
+   * Updates the mini-cart quantity display in the header and the checkout summary line.
+   */
     function updateCartQuantity() {
         const cartQuantity = cart.calculateCartQuantity();
         document.querySelector(".js-return-to-home-link").innerHTML = `${cartQuantity} ${cartQuantity === 1 ? "item" : "items"}`;
     }
 
+    // Inject compiled HTML into the DOM
     document.querySelector(".js-order-summary").innerHTML = orderSummaryHTML;
     updateCartQuantity();
 
+    // Event: Delete item from cart
     document.querySelectorAll(".js-delete-link").forEach((link) => {
         link.addEventListener("click", () => {
             const productId = link.dataset.productId;
@@ -108,6 +128,7 @@ export function renderOrderSummary() {
         })
     })
 
+    // Event: Enter quantity edit mode
     document.querySelectorAll(".js-update-link").forEach((link) => {
         link.addEventListener("click", () => {
             const productId = link.dataset.productId;
@@ -120,6 +141,7 @@ export function renderOrderSummary() {
         });
     });
 
+    // Event: Save new quantity
     document.querySelectorAll(".js-save-link").forEach((link) => {
         link.addEventListener("click", () => {
             const productId = link.dataset.productId;
@@ -135,6 +157,7 @@ export function renderOrderSummary() {
         });
     });
 
+    // Event: Change delivery option
     document.querySelectorAll(".js-delivery-option").forEach((option) => {
         option.addEventListener("click", () => {
             const {productId, deliveryOptionId} = option.dataset

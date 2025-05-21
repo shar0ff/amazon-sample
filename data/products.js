@@ -1,5 +1,8 @@
 import {formatCurrency} from "../scripts/helpers/currency.js";
 
+/**
+ * Represents a general product.
+ */
 export class Product {
   id;
   image;
@@ -8,6 +11,15 @@ export class Product {
   priceCents;
   keywords;
 
+  /**
+   * @param {Object} productDetails - The product data object.
+   * @param {string} productDetails.id - Unique product ID.
+   * @param {string} productDetails.image - URL of the product image.
+   * @param {string} productDetails.name - Product name.
+   * @param {Object} productDetails.rating - Rating object with `stars` and `count`.
+   * @param {number} productDetails.priceCents - Price in cents.
+   * @param {Array<string>} productDetails.keywords - Searchable keywords for the product.
+   */
   constructor(productDetails) {
     this.id = productDetails.id;
     this.image = productDetails.image;
@@ -17,27 +29,52 @@ export class Product {
     this.keywords = productDetails.keywords;
   }
 
+  /**
+   * Gets the image path for the star rating.
+   * @returns {string} - URL to the star image.
+   */
   getStarsUrl() {
     return `images/ratings/rating-${this.rating.stars * 10}.png`;
   }
 
+  /**
+   * Returns the formatted price string.
+   * @returns {string} - Formatted price, e.g., "$19.99".
+   */
   getPrice() {
     return `$${formatCurrency(this.priceCents)}`;
   }
 
+  /**
+   * Returns any additional HTML info specific to the product type.
+   * Can be overridden in subclasses.
+   * @returns {string} - HTML string.
+   */
   extraInfoHTML() {
     return '';
   }
 }
 
+/**
+ * Represents a clothing item, subclass of Product.
+ * Adds a size chart link.
+ */
 export class Clothing extends Product {
   sizeChartLink;
 
+  /**
+   * @param {Object} productDetails - Clothing-specific product data.
+   * @param {string} productDetails.sizeChartLink - URL to the size chart.
+   */
   constructor(productDetails) {
     super(productDetails);
     this.sizeChartLink = productDetails.sizeChartLink;
   }
 
+  /**
+   * @override
+   * @returns {string} - HTML with a link to the size chart.
+   */
   extraInfoHTML() {
     return `
       <a href="${this.sizeChartLink}" target="_blank">Size chart</a>
@@ -45,16 +82,29 @@ export class Clothing extends Product {
   }
 }
 
+/**
+ * Represents an appliance item, subclass of Product.
+ * Adds links to instructions and warranty.
+ */
 export class Appliance extends Product {
   instructionsLink;
   warrantyLink;
 
+  /**
+   * @param {Object} productDetails - Appliance-specific product data.
+   * @param {string} productDetails.instructionsLink - URL to the instructions.
+   * @param {string} productDetails.warrantyLink - URL to the warranty.
+   */
   constructor(productDetails) {
     super(productDetails);
     this.instructionsLink = productDetails.instructionsLink;
     this.warrantyLink = productDetails.warrantyLink;
   }
 
+  /**
+   * @override
+   * @returns {string} - HTML with links to instructions and warranty.
+   */
   extraInfoHTML() {
     return `
       <a href="${this.instructionsLink}" target="_blank">Instructions</a>
@@ -63,8 +113,18 @@ export class Appliance extends Product {
   }
 }
 
+/**
+ * The in-memory list of products. Populated after `loadProducts()` is called.
+ * @type {Array<Product|Clothing|Appliance>}
+ */
 export let products = [];
 
+/**
+ * Retrieves a product by its ID.
+ *
+ * @param {string} productId - The unique ID of the product.
+ * @returns {Product|Clothing|Appliance|undefined} - The matching product, or undefined if not found.
+ */
 export function getProductById(productId) {
   let matchingProduct;
 
@@ -77,6 +137,12 @@ export function getProductById(productId) {
   return matchingProduct;
 }
 
+/**
+ * Loads product data from the backend API and populates the `products` array.
+ * Automatically creates instances of `Product`, `Clothing`, or `Appliance` based on type.
+ *
+ * @returns {Promise<void>} - Resolves once the products are loaded.
+ */
 export function loadProducts() {
   const promise = fetch("https://supersimplebackend.dev/products").then((response) => {
     return response.json();

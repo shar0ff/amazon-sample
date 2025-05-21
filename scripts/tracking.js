@@ -3,6 +3,13 @@ import {getProductById, loadProducts} from '../data/products.js';
 import {cart} from '../data/cart.js';
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
 
+/**
+ * Initializes the order tracking page by:
+ * - Loading product data
+ * - Fetching the specific order and product from the URL query parameters
+ * - Calculating delivery progress
+ * - Rendering a progress bar and order info
+ */
 async function loadPage() {
   await loadProducts();
 
@@ -13,6 +20,7 @@ async function loadPage() {
   const order = getOrderById(orderId);
   const product = getProductById(productId);
 
+  // Find the matching product line within the order
   let productDetails;
   order.products.forEach((details) => {
     if (details.productId === product.id) {
@@ -20,11 +28,13 @@ async function loadPage() {
     }
   });
 
-    const today = dayjs();
-    const orderDate = dayjs(order.orderTime);
-    const deliveryDate = dayjs(productDetails.estimatedDeliveryTime);
-    const percentProgress = ((today - orderDate) / (deliveryDate - orderDate)) * 100;
+  // Calculate delivery progress as a percentage
+  const today = dayjs();
+  const orderDate = dayjs(order.orderTime);
+  const deliveryDate = dayjs(productDetails.estimatedDeliveryTime);
+  const percentProgress = ((today - orderDate) / (deliveryDate - orderDate)) * 100;
 
+  // Generate the tracking page HTML
   const trackingHTML = `
     <a class="back-to-orders-link link-primary" href="orders.html">
       View all orders
@@ -57,8 +67,12 @@ async function loadPage() {
     </div>
   `;
 
+  // Inject the generated HTML into the DOM
   document.querySelector('.js-order-tracking').innerHTML = trackingHTML;
+
+  // Update cart quantity in the header
   cart.updateCartQuantity();
 }
 
+// Start page
 loadPage();
